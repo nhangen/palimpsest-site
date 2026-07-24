@@ -1,0 +1,731 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+  #ag *{box-sizing:border-box}
+  #ag{
+    --serif:"Iowan Old Style","Palatino Linotype",Palatino,Georgia,"Times New Roman",serif;
+    --mono:ui-monospace,"SF Mono","JetBrains Mono",Menlo,Consolas,monospace;
+  }
+  #ag[data-theme="light"]{
+    --paper:#dcdcd5;--paper-2:#e6e6df;--panel:#d2d2ca;--ink:#191b22;--ink-soft:#4a4d57;
+    --ink-faint:#8a8c93;--accent:#5559a6;--accent-soft:#9295c6;--line:#bbbbb1;--mark-off:#b7b7ae;
+  }
+  #ag[data-theme="dark"]{
+    --paper:#101117;--paper-2:#171922;--panel:#1c1e28;--ink:#dcdce2;--ink-soft:#9a9ca8;
+    --ink-faint:#5b5d69;--accent:#9498de;--accent-soft:#63668f;--line:#2a2c38;--mark-off:#32343e;
+  }
+  #ag a{color:var(--accent);text-decoration:none;border-bottom:1px solid var(--accent-soft)}
+  #ag a:hover{color:var(--ink)}
+  #ag ::selection{background:var(--accent-soft);color:var(--paper)}
+  #ag button:focus-visible,#ag input:focus-visible,#ag a:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+  #ag input[type=range]{accent-color:var(--accent);height:22px;cursor:pointer}
+  @keyframes agBlink{0%,100%{opacity:1}50%{opacity:.15}}
+  @media (prefers-reduced-motion: reduce){#ag [data-reveal]{transition:none !important}}
+</style>
+</helmet>
+<template id="__bundler_thumbnail"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><rect width="512" height="512" fill="#171922"/><g fill="none" stroke="#5b5f8a" stroke-width="7" stroke-linecap="round" opacity="0.5"><path d="M150 170h230M150 205h180M150 240h210M150 275h150M150 310h195M150 345h120"/></g><g fill="#9498de"><circle cx="256" cy="256" r="150" fill="none" stroke="#9498de" stroke-width="10" opacity="0.9"/><circle cx="256" cy="256" r="34"/></g></svg></template>
+<div id="ag" data-theme="light" style="min-height:100vh;background:var(--paper);color:var(--ink);font-family:var(--serif);line-height:1.6;-webkit-font-smoothing:antialiased;overflow-x:hidden;">
+
+  <div id="ag-prog" style="position:fixed;top:0;left:0;height:3px;width:0%;background:var(--accent);z-index:60;transition:width .1s linear;"></div>
+
+  <div style="position:fixed;top:16px;right:18px;z-index:60;display:flex;gap:8px;">
+    <button id="ag-theme" aria-label="Toggle color theme" style="font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;background:var(--panel);color:var(--ink-soft);border:1px solid var(--line);border-radius:999px;padding:8px 14px;cursor:pointer;">Auto</button>
+  </div>
+
+  <!-- ===== HERO / SCENE 1 : PALIMPSEST ===== -->
+  <section id="s1" style="position:relative;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px;overflow:hidden;">
+    <canvas id="cvHero" aria-hidden="true" style="position:absolute;inset:0;width:100%;height:100%;display:block;"></canvas>
+    <div data-reveal style="position:relative;text-align:center;max-width:900px;opacity:0;transform:translateY(14px);transition:opacity 1.1s ease,transform 1.1s ease;">
+      <div style="font-family:var(--mono);font-size:12px;letter-spacing:.34em;text-transform:uppercase;color:var(--ink-faint);margin-bottom:22px;">Aging, read as information</div>
+      <h1 style="font-size:clamp(44px,9vw,116px);line-height:.94;margin:0;font-weight:600;letter-spacing:-.01em;">The Palimpsest</h1>
+      <p style="font-size:clamp(17px,2.2vw,23px);line-height:1.5;color:var(--ink-soft);max-width:40ch;margin:26px auto 0;text-wrap:pretty;">Your cells are not wearing out. They are slowly <em>forgetting who they are</em>, one imperfect copy at a time.</p>
+      <div style="font-family:var(--mono);font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--ink-faint);margin-top:54px;animation:agBlink 3s ease-in-out infinite;">Scroll ↓</div>
+    </div>
+    <button id="btnHero" style="position:absolute;bottom:20px;right:20px;font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;background:transparent;color:var(--ink-faint);border:1px solid var(--line);border-radius:999px;padding:7px 13px;cursor:pointer;">Pause</button>
+  </section>
+
+  <!-- ===== SCENE 2 : IDENTITY IS A MESSAGE ===== -->
+  <section id="s2" style="max-width:960px;margin:0 auto;padding:14vh 24px;">
+    <div data-reveal style="opacity:0;transform:translateY(18px);transition:opacity .8s ease,transform .8s ease;">
+      <div style="font-family:var(--mono);font-size:12px;letter-spacing:.24em;text-transform:uppercase;color:var(--ink-faint);">Scene 02</div>
+      <h2 style="font-size:clamp(28px,4.4vw,48px);line-height:1.05;margin:.28em 0 .5em;font-weight:600;letter-spacing:-.01em;">Your identity is a message</h2>
+      <p style="font-size:clamp(16px,1.7vw,19px);line-height:1.66;color:var(--ink-soft);max-width:64ch;text-wrap:pretty;">Every cell in your body carries the same genome, the same three billion letters. So what makes a neuron a neuron and a liver cell a liver cell? Not the letters. It is the <strong style="color:var(--ink);font-weight:600;">annotations</strong>: a layer of chemical <strong style="color:var(--ink);font-weight:600;">methylation marks</strong> laid over the DNA that decide which genes are switched on. That pattern is the message. Read correctly, it spells <em>you</em>.</p>
+    </div>
+    <figure style="margin:36px 0 0;">
+      <canvas id="cv2" role="img" aria-label="A grid of methylation marks arranging into a recognizable cell-shaped pattern, the codeword." style="width:100%;height:420px;display:block;background:var(--paper-2);border:1px solid var(--line);border-radius:5px;"></canvas>
+      <figcaption style="display:flex;flex-wrap:wrap;gap:14px;align-items:center;justify-content:space-between;margin-top:12px;font-family:var(--mono);font-size:12px;color:var(--ink-faint);">
+        <span>625 sites · each on or off · together, one codeword</span>
+        <button id="btn2" style="font-family:var(--mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;background:var(--panel);color:var(--ink-soft);border:1px solid var(--line);border-radius:999px;padding:7px 14px;cursor:pointer;">Replay</button>
+      </figcaption>
+    </figure>
+  </section>
+
+  <!-- ===== SCENE 3 : NOISY COPY ===== -->
+  <section id="s3" style="max-width:960px;margin:0 auto;padding:14vh 24px;">
+    <div data-reveal style="opacity:0;transform:translateY(18px);transition:opacity .8s ease,transform .8s ease;">
+      <div style="font-family:var(--mono);font-size:12px;letter-spacing:.24em;text-transform:uppercase;color:var(--ink-faint);">Scene 03</div>
+      <h2 style="font-size:clamp(28px,4.4vw,48px);line-height:1.05;margin:.28em 0 .5em;font-weight:600;letter-spacing:-.01em;">Every division is a noisy copy</h2>
+      <p style="font-size:clamp(16px,1.7vw,19px);line-height:1.66;color:var(--ink-soft);max-width:64ch;text-wrap:pretty;">When a cell divides, the pattern must be re-written onto its daughter. The copy is good, but not perfect. In 1948 Claude Shannon showed what happens when a message crosses a <strong style="color:var(--ink);font-weight:600;">noisy channel</strong> over and over: retained information leaks away along a predictable curve, drifting toward a coin-flip.</p>
+    </div>
+    <figure style="margin:36px 0 0;display:grid;grid-template-columns:1fr;gap:18px;">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:18px;" data-stack="s3">
+        <canvas id="cv3" role="img" aria-label="The codeword pattern, growing noisier with each cell generation." style="width:100%;height:300px;display:block;background:var(--paper-2);border:1px solid var(--line);border-radius:5px;"></canvas>
+        <canvas id="cv3plot" role="img" aria-label="Retained information plotted against generations, tracing Shannon's decay curve." style="width:100%;height:300px;display:block;background:var(--paper-2);border:1px solid var(--line);border-radius:5px;"></canvas>
+      </div>
+      <figcaption style="display:flex;flex-wrap:wrap;gap:18px;align-items:center;justify-content:space-between;font-family:var(--mono);font-size:12px;color:var(--ink-faint);">
+        <div style="display:flex;gap:26px;align-items:baseline;">
+          <span>generation <strong id="out3gen" style="color:var(--ink);font-size:15px;">0</strong></span>
+          <span>bits retained <strong id="out3bits" style="color:var(--accent);font-size:15px;">625</strong> / 625</span>
+        </div>
+        <div style="display:flex;gap:8px;">
+          <button id="btn3reset" style="font-family:var(--mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;background:transparent;color:var(--ink-faint);border:1px solid var(--line);border-radius:999px;padding:7px 14px;cursor:pointer;">Reset</button>
+          <button id="btn3" style="font-family:var(--mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;background:var(--panel);color:var(--ink-soft);border:1px solid var(--line);border-radius:999px;padding:7px 14px;cursor:pointer;">Pause</button>
+        </div>
+      </figcaption>
+    </figure>
+  </section>
+
+  <!-- ===== SCENE 4 : NO BACKUP ===== -->
+  <section id="s4" style="max-width:960px;margin:0 auto;padding:14vh 24px;">
+    <div data-reveal style="opacity:0;transform:translateY(18px);transition:opacity .8s ease,transform .8s ease;">
+      <div style="font-family:var(--mono);font-size:12px;letter-spacing:.24em;text-transform:uppercase;color:var(--ink-faint);">Scene 04 · the crux</div>
+      <h2 style="font-size:clamp(28px,4.4vw,48px);line-height:1.05;margin:.28em 0 .5em;font-weight:600;letter-spacing:-.01em;">There is no backup</h2>
+      <p style="font-size:clamp(16px,1.7vw,19px);line-height:1.66;color:var(--ink-soft);max-width:64ch;text-wrap:pretty;">A photocopier can compare each new page to a pristine original. Your epigenome cannot, there is no master copy stored anywhere. The machinery copies the marks that are <em>currently there</em>, corruption and all. Copy from the original, and the message stays perfect forever. Copy the copy, and errors are inherited and compound. Life does the second thing.</p>
+    </div>
+    <figure style="margin:36px 0 0;">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:18px;" data-stack="s4">
+        <div style="border:1px solid var(--line);border-radius:5px;background:var(--paper-2);overflow:hidden;">
+          <div style="font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-soft);padding:12px 14px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;">
+            <span>copy from the original</span><span id="out4l" style="color:var(--accent);">625 bits</span>
+          </div>
+          <canvas id="cv4l" role="img" aria-label="A pattern copied from the pristine original each generation stays perfect." style="width:100%;height:280px;display:block;"></canvas>
+        </div>
+        <div style="border:1px solid var(--line);border-radius:5px;background:var(--paper-2);overflow:hidden;">
+          <div style="font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-soft);padding:12px 14px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;">
+            <span>copy the copy · reality</span><span id="out4r" style="color:var(--accent);">625 bits</span>
+          </div>
+          <canvas id="cv4r" role="img" aria-label="A pattern copied from the previous copy each generation decays into noise." style="width:100%;height:280px;display:block;"></canvas>
+        </div>
+      </div>
+      <figcaption style="display:flex;flex-wrap:wrap;gap:18px;align-items:center;justify-content:space-between;margin-top:12px;font-family:var(--mono);font-size:12px;color:var(--ink-faint);">
+        <span>generation <strong id="out4gen" style="color:var(--ink);font-size:15px;">0</strong> · same noise per copy, opposite fate</span>
+        <div style="display:flex;gap:8px;">
+          <button id="btn4reset" style="font-family:var(--mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;background:transparent;color:var(--ink-faint);border:1px solid var(--line);border-radius:999px;padding:7px 14px;cursor:pointer;">Reset</button>
+          <button id="btn4" style="font-family:var(--mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;background:var(--panel);color:var(--ink-soft);border:1px solid var(--line);border-radius:999px;padding:7px 14px;cursor:pointer;">Pause</button>
+        </div>
+      </figcaption>
+    </figure>
+  </section>
+
+  <!-- ===== SCENE 5 : ANCHORS ===== -->
+  <section id="s5" style="max-width:960px;margin:0 auto;padding:14vh 24px;">
+    <div data-reveal style="opacity:0;transform:translateY(18px);transition:opacity .8s ease,transform .8s ease;">
+      <div style="font-family:var(--mono);font-size:12px;letter-spacing:.24em;text-transform:uppercase;color:var(--ink-faint);">Scene 05</div>
+      <h2 style="font-size:clamp(28px,4.4vw,48px);line-height:1.05;margin:.28em 0 .5em;font-weight:600;letter-spacing:-.01em;">Anchors hold the line</h2>
+      <p style="font-size:clamp(16px,1.7vw,19px);line-height:1.66;color:var(--ink-soft);max-width:64ch;text-wrap:pretty;">So why don't cells dissolve into noise within a week? Because a sparse set of sites are <strong style="color:var(--ink);font-weight:600;">pinned to the DNA sequence itself</strong>, proteins like CTCF and boundary elements that do not drift. Local feedback lets them re-impose their signal on wavering neighbors. Below a noise threshold, the pattern heals faster than it decays. Drag the noise up and watch it hold, then, past a point, melt all at once.</p>
+    </div>
+    <figure style="margin:36px 0 0;">
+      <canvas id="cv5" role="img" aria-label="A striped chromatin pattern held stable by sparse fixed anchor sites under adjustable noise." style="width:100%;height:340px;display:block;background:var(--paper-2);border:1px solid var(--line);border-radius:5px;"></canvas>
+      <figcaption style="margin-top:16px;font-family:var(--mono);font-size:12px;color:var(--ink-faint);">
+        <div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap;">
+          <label for="sld5" style="min-width:120px;">copy noise</label>
+          <input id="sld5" type="range" min="0" max="100" style="flex:1;min-width:180px;">
+          <span id="out5n" style="color:var(--ink);min-width:52px;text-align:right;">0.06</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:10px;margin-top:14px;">
+          <span style="min-width:120px;">pattern intact</span>
+          <div style="flex:1;height:10px;background:var(--panel);border-radius:999px;overflow:hidden;border:1px solid var(--line);">
+            <div id="bar5" style="height:100%;width:100%;background:var(--accent);transition:width .18s linear,background .3s;"></div>
+          </div>
+          <span id="out5o" style="color:var(--ink);min-width:44px;text-align:right;">100%</span>
+        </div>
+        <div style="margin-top:12px;display:flex;gap:20px;flex-wrap:wrap;">
+          <span style="display:inline-flex;align-items:center;gap:7px;"><span style="width:11px;height:11px;background:var(--accent);border-radius:2px;display:inline-block;"></span>state A</span>
+          <span style="display:inline-flex;align-items:center;gap:7px;"><span style="width:11px;height:11px;background:var(--mark-off);border-radius:2px;display:inline-block;"></span>state B</span>
+          <span style="display:inline-flex;align-items:center;gap:7px;"><span style="width:11px;height:11px;border:2px solid var(--ink);border-radius:2px;display:inline-block;"></span>anchor · sequence-pinned</span>
+        </div>
+      </figcaption>
+    </figure>
+  </section>
+
+  <!-- ===== SCENE 6 : POINT OF NO RETURN ===== -->
+  <section id="s6" style="max-width:960px;margin:0 auto;padding:14vh 24px;">
+    <div data-reveal style="opacity:0;transform:translateY(18px);transition:opacity .8s ease,transform .8s ease;">
+      <div style="font-family:var(--mono);font-size:12px;letter-spacing:.24em;text-transform:uppercase;color:var(--ink-faint);">Scene 06</div>
+      <h2 style="font-size:clamp(28px,4.4vw,48px);line-height:1.05;margin:.28em 0 .5em;font-weight:600;letter-spacing:-.01em;">The point of no return</h2>
+      <p style="font-size:clamp(16px,1.7vw,19px);line-height:1.66;color:var(--ink-soft);max-width:64ch;text-wrap:pretty;">With age the anchors themselves erode, and not because the DNA changes. Methylation creeps over the binding site, and a reader like CTCF <strong style="color:var(--ink);font-weight:600;">cannot grip a methylated motif</strong>: it bounces off, and the anchor goes dark. The sequence is still there; nothing can read it. And here is the cruel part: <strong style="color:var(--ink);font-weight:600;">recoverability does not track how damaged a cell looks.</strong> A heavily-drifted cell whose anchors survive can be rebuilt. A barely-drifted cell whose anchors have gone bad is already lost, it just doesn't show it yet. Press <em>attempt recovery</em> and watch which one comes back.</p>
+    </div>
+    <figure style="margin:36px 0 0;">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:18px;" data-stack="s6">
+        <div style="border:1px solid var(--line);border-radius:5px;background:var(--paper-2);overflow:hidden;">
+          <div style="padding:12px 14px;border-bottom:1px solid var(--line);">
+            <div style="font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-soft);">Cell A · looks wrecked</div>
+            <div style="font-size:13px;color:var(--ink-faint);margin-top:3px;">heavy drift · <strong style="color:var(--ink);">anchors intact</strong></div>
+          </div>
+          <canvas id="cv6a" role="img" aria-label="Cell A: heavily drifted field but intact anchors." style="width:100%;height:220px;display:block;"></canvas>
+          <div style="font-family:var(--mono);font-size:12px;color:var(--ink-faint);padding:10px 14px;border-top:1px solid var(--line);">true identity <strong id="out6a" style="color:var(--accent);">, </strong></div>
+        </div>
+        <div style="border:1px solid var(--line);border-radius:5px;background:var(--paper-2);overflow:hidden;">
+          <div style="padding:12px 14px;border-bottom:1px solid var(--line);">
+            <div style="font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-soft);">Cell B · looks fine</div>
+            <div style="font-size:13px;color:var(--ink-faint);margin-top:3px;">slight drift · <strong style="color:var(--ink);">anchors corrupted</strong></div>
+          </div>
+          <canvas id="cv6b" role="img" aria-label="Cell B: barely drifted field but corrupted anchors." style="width:100%;height:220px;display:block;"></canvas>
+          <div style="font-family:var(--mono);font-size:12px;color:var(--ink-faint);padding:10px 14px;border-top:1px solid var(--line);">true identity <strong id="out6b" style="color:var(--accent);">, </strong></div>
+        </div>
+      </div>
+      <figcaption style="display:flex;flex-wrap:wrap;gap:14px;align-items:center;justify-content:space-between;margin-top:14px;font-family:var(--mono);font-size:12px;color:var(--ink-faint);">
+        <span id="out6msg">Both cells re-read their marks from the anchors outward.</span>
+        <button id="btn6" style="font-family:var(--mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;background:var(--accent);color:var(--paper);border:1px solid var(--accent);border-radius:999px;padding:8px 16px;cursor:pointer;">Attempt recovery</button>
+      </figcaption>
+    </figure>
+  </section>
+
+  <!-- ===== SCENE 7 : REPROGRAMMING DOSE ===== -->
+  <section id="s7" style="max-width:960px;margin:0 auto;padding:14vh 24px;">
+    <div data-reveal style="opacity:0;transform:translateY(18px);transition:opacity .8s ease,transform .8s ease;">
+      <div style="font-family:var(--mono);font-size:12px;letter-spacing:.24em;text-transform:uppercase;color:var(--ink-faint);">Scene 07</div>
+      <h2 style="font-size:clamp(28px,4.4vw,48px);line-height:1.05;margin:.28em 0 .5em;font-weight:600;letter-spacing:-.01em;">Reprogramming has a safe dose</h2>
+      <p style="font-size:clamp(16px,1.7vw,19px);line-height:1.66;color:var(--ink-soft);max-width:64ch;text-wrap:pretty;">If the original text is still down there, you can re-read it. A pulse of Yamanaka factors coaxes old cells back toward youth <strong style="color:var(--ink);font-weight:600;">without changing their DNA</strong>. But it is an inverted-U. Too little does nothing; a measured dose rejuvenates; too much erases identity outright, a cell that forgets it was ever a cell becomes a tumor. Slide the dose and find the window.</p>
+    </div>
+    <figure style="margin:36px 0 0;">
+      <div style="display:grid;grid-template-columns:1.15fr .85fr;gap:18px;" data-stack="s7">
+        <canvas id="cv7plot" role="img" aria-label="Inverted-U curve of rejuvenation benefit against reprogramming dose." style="width:100%;height:320px;display:block;background:var(--paper-2);border:1px solid var(--line);border-radius:5px;"></canvas>
+        <canvas id="cv7" role="img" aria-label="The cell's identity pattern under the current reprogramming dose." style="width:100%;height:320px;display:block;background:var(--paper-2);border:1px solid var(--line);border-radius:5px;"></canvas>
+      </div>
+      <figcaption style="margin-top:16px;font-family:var(--mono);font-size:12px;color:var(--ink-faint);">
+        <div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap;">
+          <label for="sld7" style="min-width:120px;">reprogramming dose</label>
+          <input id="sld7" type="range" min="0" max="100" style="flex:1;min-width:180px;">
+          <span id="out7d" style="color:var(--ink);min-width:52px;text-align:right;">0.34</span>
+        </div>
+        <div id="out7z" style="margin-top:12px;color:var(--ink);font-size:13px;">Rejuvenation window, identity restored, age reset.</div>
+      </figcaption>
+    </figure>
+  </section>
+
+  <!-- ===== SCENE 8 : MOLECULAR CLOSE-UP ===== -->
+  <section id="s8" style="max-width:960px;margin:0 auto;padding:14vh 24px;">
+    <div data-reveal style="opacity:0;transform:translateY(18px);transition:opacity .8s ease,transform .8s ease;">
+      <div style="font-family:var(--mono);font-size:12px;letter-spacing:.24em;text-transform:uppercase;color:var(--ink-faint);">Scene 08 · up close</div>
+      <h2 style="font-size:clamp(28px,4.4vw,48px);line-height:1.05;margin:.28em 0 .5em;font-weight:600;letter-spacing:-.01em;">The asymmetry that traps the cell</h2>
+      <p style="font-size:clamp(16px,1.7vw,19px);line-height:1.66;color:var(--ink-soft);max-width:64ch;text-wrap:pretty;">Why can't a cell simply fix itself? Because its copier, <strong style="color:var(--ink);font-weight:600;">DNMT1</strong>, is faithful to the <em>present</em>, not to the truth, it duplicates whatever mark it lands on, mistake and all. An anchor protein like <strong style="color:var(--ink);font-weight:600;">CTCF</strong> is different: it clamps a site back to the value the sequence dictates, ignoring the drift. Self-maintenance can only hold what remains; only a reference from <em>outside</em> the drifting copy can restore what's lost.</p>
+    </div>
+    <figure style="margin:36px 0 0;">
+      <canvas id="cv8" role="img" aria-label="DNMT1 faithfully copying a corrupted strand versus CTCF clamping an anchor back to its true value." style="width:100%;height:400px;display:block;background:var(--paper-2);border:1px solid var(--line);border-radius:5px;"></canvas>
+      <figcaption style="display:flex;flex-wrap:wrap;gap:14px;align-items:center;justify-content:space-between;margin-top:12px;font-family:var(--mono);font-size:12px;color:var(--ink-faint);">
+        <span>faithful copying propagates the error · the anchor overwrites it with truth</span>
+        <button id="btn8" style="font-family:var(--mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;background:var(--panel);color:var(--ink-soft);border:1px solid var(--line);border-radius:999px;padding:7px 14px;cursor:pointer;">Pause</button>
+      </figcaption>
+    </figure>
+  </section>
+
+  <!-- ===== CLOSING ===== -->
+  <section id="s9" style="max-width:760px;margin:0 auto;padding:16vh 24px 8vh;">
+    <div data-reveal style="opacity:0;transform:translateY(18px);transition:opacity .8s ease,transform .8s ease;">
+      <p style="font-size:clamp(21px,3vw,32px);line-height:1.4;font-weight:600;letter-spacing:-.01em;max-width:24ch;margin:0 0 .8em;text-wrap:pretty;">The text was never erased. We only lost the ability to read it.</p>
+      <p style="font-size:clamp(16px,1.7vw,19px);line-height:1.66;color:var(--ink-soft);max-width:60ch;text-wrap:pretty;">That is the hopeful edge of this picture. Aging, in the information view, is lost <em>access</em> to instructions that are still physically present, a palimpsest, not a blank page. Which is exactly why re-reading can, in principle, make an old cell young again.</p>
+    </div>
+  </section>
+
+  <!-- ===== FINDINGS : WHAT WE ACTUALLY FOUND ===== -->
+  <section id="s9f" style="max-width:960px;margin:0 auto;padding:4vh 24px 14vh;">
+    <div data-reveal style="opacity:0;transform:translateY(18px);transition:opacity .8s ease,transform .8s ease;">
+      <div style="font-family:var(--mono);font-size:12px;letter-spacing:.24em;text-transform:uppercase;color:var(--ink-faint);">Our own analysis · a negative result</div>
+      <h2 style="font-size:clamp(28px,4.4vw,48px);line-height:1.05;margin:.28em 0 .5em;font-weight:600;letter-spacing:-.01em;">What we actually found</h2>
+      <p style="font-size:clamp(16px,1.7vw,19px);line-height:1.66;color:var(--ink-soft);max-width:64ch;text-wrap:pretty;">Everything above is the model. So we went looking for its signature in real human blood, reanalyzing public whole-genome methylation data for the tell-tale <strong style="color:var(--ink);font-weight:600;">melting</strong>: within-cell disorder that should rise with age at composition-inert, fully-methylated sites. We did not find it.</p>
+    </div>
+    <div data-reveal style="opacity:0;transform:translateY(18px);transition:opacity .8s ease,transform .8s ease;margin-top:34px;display:grid;gap:16px;">
+
+      <div style="border:1px solid var(--line);border-radius:6px;background:var(--paper-2);padding:20px 22px;display:grid;grid-template-columns:auto 1fr;gap:18px;align-items:start;">
+        <div style="font-family:var(--mono);font-size:13px;color:var(--ink-faint);padding-top:2px;">01</div>
+        <div>
+          <div style="font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);">No late-life melting</div>
+          <p style="font-size:16px;line-height:1.62;color:var(--ink-soft);margin:9px 0 0;text-wrap:pretty;">The age-drift trajectory is <strong style="color:var(--ink);font-weight:600;">front-loaded and decelerating</strong>, a relaxation toward a floor, not the late-accelerating runaway the melting picture predicts.</p>
+        </div>
+      </div>
+
+      <div style="border:1px solid var(--line);border-radius:6px;background:var(--paper-2);padding:20px 22px;display:grid;grid-template-columns:auto 1fr;gap:18px;align-items:start;">
+        <div style="font-family:var(--mono);font-size:13px;color:var(--ink-faint);padding-top:2px;">02</div>
+        <div>
+          <div style="font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);">The one melting-like signal is an artifact</div>
+          <p style="font-size:16px;line-height:1.62;color:var(--ink-soft);margin:9px 0 0;text-wrap:pretty;">Sorted CD4 T-cells, ages 18–25 against 82–86 (GSE79798), showed a small <strong style="color:var(--ink);font-weight:600;">+0.008</strong> read-level disorder gap. But it <em>rose with CpG density</em>, the fingerprint of per-base copy error, and it sat inside the pure lab-noise floor measured on identical DNA run through different bisulfite kits and sequencers (GSE128731: +0.022 to +0.049). A gap smaller than the instrument's own noise is not a biological signal.</p>
+          <div style="margin-top:20px;padding-top:16px;border-top:1px solid var(--line);">
+            <div style="font-family:var(--mono);font-size:10px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-faint);margin-bottom:10px;">read-level disorder gap · old minus young</div>
+            <div style="position:relative;height:74px;">
+              <div style="position:absolute;left:0;right:0;top:40px;height:2px;background:var(--line);"></div>
+              <div style="position:absolute;top:24px;height:16px;left:40%;width:49.1%;background:var(--accent-soft);opacity:.30;border-radius:3px;"></div>
+              <div style="position:absolute;top:4px;left:40%;width:49.1%;text-align:center;font-family:var(--mono);font-size:10px;color:var(--ink-soft);">lab-noise floor</div>
+              <div style="position:absolute;top:28px;left:14.5%;width:2px;height:14px;background:var(--accent);"></div>
+              <div style="position:absolute;top:28px;left:14.5%;width:8px;height:8px;background:var(--accent);border-radius:999px;transform:translate(-3px,12px);"></div>
+              <div style="position:absolute;top:50px;left:14.5%;transform:translateX(-50%);font-family:var(--mono);font-size:10px;color:var(--accent);white-space:nowrap;">+0.008</div>
+              <div style="position:absolute;top:50px;left:0;font-family:var(--mono);font-size:10px;color:var(--ink-faint);">0</div>
+              <div style="position:absolute;top:50px;left:36.4%;transform:translateX(-50%);font-family:var(--mono);font-size:10px;color:var(--ink-faint);">0.02</div>
+              <div style="position:absolute;top:50px;left:72.7%;transform:translateX(-50%);font-family:var(--mono);font-size:10px;color:var(--ink-faint);">0.04</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div style="border:1px solid var(--accent-soft);border-radius:6px;background:var(--paper-2);padding:20px 22px;display:grid;grid-template-columns:auto 1fr;gap:18px;align-items:start;">
+        <div style="font-family:var(--mono);font-size:15px;color:var(--accent);padding-top:1px;">→</div>
+        <div>
+          <div style="font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);">Plain takeaway</div>
+          <p style="font-size:16px;line-height:1.62;color:var(--ink);margin:9px 0 0;text-wrap:pretty;">In blood, aging looks like <strong style="font-weight:600;">per-site information decay plus shifting cell composition</strong>, with no detectable melting to reverse. This is a cross-sectional negative result at the resolution public data allows. The definitive single-cohort test is still pending.</p>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ===== DATA & SOURCES ===== -->
+  <section id="ssrc" style="max-width:960px;margin:0 auto;padding:0 24px 14vh;">
+    <div data-reveal style="opacity:0;transform:translateY(18px);transition:opacity .8s ease,transform .8s ease;">
+      <div style="font-family:var(--mono);font-size:12px;letter-spacing:.24em;text-transform:uppercase;color:var(--ink-faint);">Data &amp; sources</div>
+      <h2 style="font-size:clamp(24px,3.4vw,36px);line-height:1.08;margin:.3em 0 1.1em;font-weight:600;letter-spacing:-.01em;">What this is built on</h2>
+      <div data-stack="sources" style="display:grid;grid-template-columns:1fr 1fr;gap:40px;">
+        <div>
+          <div style="font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);margin-bottom:6px;">Datasets analyzed</div>
+          <div>
+            <div style="padding:13px 0;border-top:1px solid var(--line);"><span style="font-family:var(--mono);font-size:13px;color:var(--accent);">GSE79798</span><div style="font-size:15px;color:var(--ink);line-height:1.5;margin-top:3px;">Sorted CD4 T-cell WGBS<span style="color:var(--ink-faint);font-style:italic;"> · Jenkinson et al., Nat Genet 2017</span></div></div>
+            <div style="padding:13px 0;border-top:1px solid var(--line);"><span style="font-family:var(--mono);font-size:13px;color:var(--accent);">GSE128731</span><div style="font-size:15px;color:var(--ink);line-height:1.5;margin-top:3px;">Bisulfite library-prep benchmark<span style="color:var(--ink-faint);font-style:italic;"> · Zhou et al., Sci Rep 2019</span></div></div>
+            <div style="padding:13px 0;border-top:1px solid var(--line);"><span style="font-family:var(--mono);font-size:13px;color:var(--accent);">GSE186458</span><div style="font-size:15px;color:var(--ink);line-height:1.5;margin-top:3px;">WGBS cell-type atlas<span style="color:var(--ink-faint);font-style:italic;"> · Loyfer et al., Nature 2023</span></div></div>
+            <div style="padding:13px 0;border-top:1px solid var(--line);"><span style="font-family:var(--mono);font-size:13px;color:var(--accent);">PRJNA339792</span><div style="font-size:15px;color:var(--ink);line-height:1.5;margin-top:3px;">Whole-blood pilot cohort</div></div>
+            <div style="padding:13px 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line);"><span style="font-family:var(--mono);font-size:13px;color:var(--accent);">GSE261769</span><div style="font-size:15px;color:var(--ink);line-height:1.5;margin-top:3px;">Methylation age dataset<span style="color:var(--ink-faint);font-style:italic;"> · Mboning et al., Front Bioinform 2024</span></div></div>
+          </div>
+        </div>
+        <div>
+          <div style="font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);margin-bottom:6px;">Key theory &amp; methods</div>
+          <div>
+            <div style="padding:13px 0;border-top:1px solid var(--line);font-size:15px;color:var(--ink);line-height:1.5;">Landau et al. 2014<span style="color:var(--ink-faint);"> · read-level discordance (PDR)</span></div>
+            <div style="padding:13px 0;border-top:1px solid var(--line);font-size:15px;color:var(--ink);line-height:1.5;">Landan et al. 2012<span style="color:var(--ink-faint);"> · epipolymorphism</span></div>
+            <div style="padding:13px 0;border-top:1px solid var(--line);font-size:15px;color:var(--ink);line-height:1.5;">Houseman et al. 2012<span style="color:var(--ink-faint);"> · cell-composition deconvolution</span></div>
+            <div style="padding:13px 0;border-top:1px solid var(--line);font-size:15px;color:var(--ink);line-height:1.5;">Horvath 2013 · Hannum et al. 2013<span style="color:var(--ink-faint);"> · methylation clocks</span></div>
+            <div style="padding:13px 0;border-top:1px solid var(--line);font-size:15px;color:var(--ink);line-height:1.5;">Ocampo et al. 2016 · Lu et al. 2020<span style="color:var(--ink-faint);"> · partial reprogramming as external reference</span></div>
+            <div style="padding:13px 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line);font-size:15px;color:var(--ink);line-height:1.5;">Shannon 1948 · Landauer 1961 · Eigen 1971 · Toom 1980<span style="color:var(--ink-faint);"> · information, erasure cost, error threshold, fault-tolerant memory</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== CREDITS & HONEST FOOTING ===== -->
+  <section id="s10" style="max-width:760px;margin:0 auto;padding:0 24px 20vh;">
+    <div data-reveal style="opacity:0;transform:translateY(18px);transition:opacity .8s ease,transform .8s ease;border-top:1px solid var(--line);padding-top:40px;">
+      <div style="font-family:var(--mono);font-size:12px;letter-spacing:.24em;text-transform:uppercase;color:var(--ink-faint);">Credits &amp; honest footing</div>
+      <p style="font-size:16px;line-height:1.66;color:var(--ink-soft);max-width:62ch;margin-top:18px;text-wrap:pretty;">This piece synthesizes existing science and, in the section above, reports our own analysis of public DNA-methylation data. That analysis is a negative, in-model result: it is not a wet-lab therapy and not a proven cure. The framing draws on David Sinclair's <em>Information Theory of Aging</em>, the Dodd–Sneppen model of bistable chromatin maintenance, the Jenkinson–Feinberg information theory of DNA methylation, Claude Shannon's 1948 <em>A Mathematical Theory of Communication</em>, and Manfred Eigen's error catastrophe. The visuals are deliberate simplifications, real methylation is not a tidy square grid, and the anchor dynamics shown are a cartoon of a subtler biology.</p>
+      <div style="margin-top:24px;padding:18px 20px;border:1px solid var(--accent-soft);border-radius:6px;background:var(--paper-2);">
+        <div style="font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);">The one open, testable prediction</div>
+        <p style="font-size:16px;line-height:1.6;margin:10px 0 0;color:var(--ink);text-wrap:pretty;">A cell's <strong>recoverability</strong> should track its <strong>surviving set of stable anchors</strong>, not its average methylation drift, the quantity today's "aging clocks" measure. Two cells with identical clock ages could differ completely in whether they can be rejuvenated. This is pre-registered and <strong>unproven</strong>; it is what would distinguish this model from a standard correlational clock.</p>
+      </div>
+      <p style="font-size:13px;line-height:1.6;color:var(--ink-faint);margin-top:20px;font-family:var(--mono);">The only new empirical claim here is a cross-sectional negative result: we did not detect a melting signature in human blood. The model's positive prediction above remains a hypothesis, not a finding.</p>
+      <div style="margin-top:30px;padding-top:26px;border-top:1px solid var(--line);">
+        <div style="font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-faint);margin-bottom:16px;">Manuscripts in preparation</div>
+        <div style="display:grid;gap:14px;">
+          <a href="manuscript/MS1.pdf" target="_blank" rel="noopener" style="display:block;font-size:16px;line-height:1.45;border-bottom:none;text-wrap:pretty;"><span style="font-family:var(--mono);font-size:11px;color:var(--ink-faint);letter-spacing:.08em;">MS1 · </span>Aging as irreversible information decay: a governing law, and the absence of a single-cell melting signature in human blood</a>
+          <a href="manuscript/MS2.pdf" target="_blank" rel="noopener" style="display:block;font-size:16px;line-height:1.45;border-bottom:none;text-wrap:pretty;"><span style="font-family:var(--mono);font-size:11px;color:var(--ink-faint);letter-spacing:.08em;">MS2 · </span>A control law for maintained epigenetic identity (the reverse-polarity regime)</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:&quot;100%&quot;,&quot;height&quot;:900},&quot;defaultTheme&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;auto&quot;,&quot;light&quot;,&quot;dark&quot;],&quot;default&quot;:&quot;auto&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Theme&quot;},&quot;accentColor&quot;:{&quot;editor&quot;:&quot;color&quot;,&quot;default&quot;:[&quot;#5559a6&quot;,&quot;#6a6a4a&quot;,&quot;#8a5a4a&quot;,&quot;#4a6a6a&quot;],&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Theme&quot;},&quot;startNoise&quot;:{&quot;editor&quot;:&quot;range&quot;,&quot;default&quot;:0.06,&quot;min&quot;:0,&quot;max&quot;:0.4,&quot;step&quot;:0.01,&quot;tsType&quot;:&quot;number&quot;,&quot;section&quot;:&quot;Scene 5&quot;,&quot;unit&quot;:&quot;&quot;}}">
+class Component extends DCLogic {
+  componentDidMount(){
+    const R = document.getElementById('ag');
+    this.R = R;
+    const mq = matchMedia('(prefers-reduced-motion: reduce)');
+    this.reduced = mq.matches;
+    const cvar = n => (getComputedStyle(R).getPropertyValue(n) || '').trim() || '#000';
+    this.cvar = cvar;
+
+    // ---------- theme ----------
+    const themeOrder = ['auto','light','dark'];
+    let tState = (this.props.defaultTheme && themeOrder.includes(this.props.defaultTheme)) ? this.props.defaultTheme : 'auto';
+    const sysDark = matchMedia('(prefers-color-scheme: dark)');
+    const applyTheme = () => {
+      const resolved = tState==='auto' ? (sysDark.matches?'dark':'light') : tState;
+      R.setAttribute('data-theme', resolved);
+      const btn = document.getElementById('ag-theme');
+      if(btn) btn.textContent = tState;
+      this.redrawAll && this.redrawAll();
+    };
+    document.getElementById('ag-theme').addEventListener('click', ()=>{
+      tState = themeOrder[(themeOrder.indexOf(tState)+1)%3]; applyTheme();
+    });
+    sysDark.addEventListener && sysDark.addEventListener('change', ()=>{ if(tState==='auto') applyTheme(); });
+    this._setTheme=(v)=>{ if(themeOrder.includes(v)&&v!==tState){ tState=v; applyTheme(); } };
+    // accent prop (ignore the swatch-array default; only real string picks apply)
+    if(typeof this.props.accentColor==='string'){ R.style.setProperty('--accent', this.props.accentColor); }
+    applyTheme();
+
+    // ---------- helpers ----------
+    const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
+    const H2=m=>{ if(m<=0||m>=1) return 0; return -m*Math.log2(m)-(1-m)*Math.log2(1-m); };
+    const mul=s=>{return function(){s|=0;s=s+0x6D2B79F5|0;let t=Math.imul(s^s>>>15,1|s);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296;};};
+    const dpr=()=>Math.min(2, window.devicePixelRatio||1);
+    const fit=cv=>{ const r=cv.getBoundingClientRect(); const d=dpr(); cv.width=Math.max(1,Math.round(r.width*d)); cv.height=Math.max(1,Math.round(r.height*d)); const ctx=cv.getContext('2d'); ctx.setTransform(d,0,0,d,0,0); return {ctx,w:r.width,h:r.height}; };
+
+    // identity codeword: a cell glyph (membrane ring + nucleus) on a G x G grid
+    const G=25;
+    const target=(x,y)=>{ const c=(G-1)/2, dx=x-c, dy=y-c, d=Math.hypot(dx,dy); const ring=(d<=11 && d>=8.9); const nuc=(d<=3.2); return (ring||nuc)?1:0; };
+    const targetArr=(()=>{const a=new Uint8Array(G*G);for(let y=0;y<G;y++)for(let x=0;x<G;x++)a[y*G+x]=target(x,y);return a;})();
+    const N=G*G;
+
+    // draw a G x G pattern grid centered; mode 'pattern' (on=accent, off=faint dot)
+    const drawPattern=(ctx,w,h,arr,appear)=>{
+      ctx.clearRect(0,0,w,h);
+      const pad=Math.min(w,h)*0.09;
+      const cell=Math.min((w-2*pad)/G,(h-2*pad)/G);
+      const ox=(w-cell*G)/2, oy=(h-cell*G)/2;
+      const on=cvar('--accent'), off=cvar('--mark-off');
+      for(let y=0;y<G;y++)for(let x=0;x<G;x++){
+        const i=y*G+x; const cx=ox+(x+.5)*cell, cy=oy+(y+.5)*cell;
+        if(appear!=null && (x+y)/(2*G) > appear) continue;
+        if(arr[i]){ ctx.fillStyle=on; ctx.beginPath(); ctx.arc(cx,cy,cell*0.40,0,7); ctx.fill(); }
+        else { ctx.fillStyle=off; ctx.globalAlpha=.34; ctx.beginPath(); ctx.arc(cx,cy,cell*0.10,0,7); ctx.fill(); ctx.globalAlpha=1; }
+      }
+    };
+
+    // ---------- scene registry / loop ----------
+    const scenes={};
+    this.scenes=scenes;
+    let last=performance.now();
+    const frame=now=>{ const dt=Math.min(70, now-last); last=now;
+      for(const k in scenes){ const s=scenes[k]; if(s.playing && s.visible && s.step){ s.step(dt); s.render&&s.render(); } }
+      this._raf=requestAnimationFrame(frame);
+    };
+    this._raf=requestAnimationFrame(frame);
+
+    const setBtn=(id,playing)=>{ const b=document.getElementById(id); if(b) b.textContent = playing?'Pause':'Play'; };
+
+    // ============ SCENE 1 : HERO PALIMPSEST ============
+    (()=>{
+      const cv=document.getElementById('cvHero'); if(!cv) return;
+      let g=fit(cv), rows=[];
+      const build=()=>{ g=fit(cv); rows=[]; const rng=mul(7);
+        const nlayers=4; const lineH=Math.max(15, g.h/34);
+        for(let L=0;L<nlayers;L++){ const layer={strokes:[],rot:(rng()-.5)*0.05, off:(rng()-.5)*40, base:0.05+L*0.05};
+          const y0=lineH*(1+L*0.35);
+          for(let y=y0;y<g.h-lineH;y+=lineH*(1.5+rng()*0.3)){
+            let x=g.w*0.08+rng()*30;
+            while(x<g.w*0.92){ const wlen=8+rng()*46; const asc=rng()<0.18?lineH*0.5:0;
+              layer.strokes.push({x,y:y-asc,w:wlen,h:lineH*(0.32+rng()*0.16)}); x+=wlen+4+rng()*10; }
+          }
+          rows.push(layer);
+        }
+      };
+      build();
+      let t=0;
+      const render=()=>{ const {ctx,w,h}=g; const ink=cvar('--ink'), paper=cvar('--paper'), acc=cvar('--accent');
+        ctx.clearRect(0,0,w,h); ctx.fillStyle=paper; ctx.fillRect(0,0,w,h);
+        // underlayers: faint scraped script
+        rows.forEach((L,idx)=>{ ctx.save(); ctx.translate(w/2+L.off,h/2); ctx.rotate(L.rot); ctx.translate(-w/2,-h/2);
+          const top = idx===rows.length-1;
+          const prog = top ? (0.5+0.5*Math.sin(t*0.0004)) : 1;
+          L.strokes.forEach(s=>{ if(top && s.x>w*0.08+(w*0.86)*prog) return;
+            ctx.globalAlpha = top ? 0.30 : (L.base + 0.03*Math.sin(t*0.0009+s.x*0.05));
+            ctx.fillStyle = top ? acc : ink; ctx.fillRect(s.x,s.y,s.w,s.h); });
+          ctx.restore(); });
+        ctx.globalAlpha=1;
+        // vignette toward paper for legibility of centered title
+        const grd=ctx.createRadialGradient(w/2,h/2,Math.min(w,h)*0.12,w/2,h/2,Math.max(w,h)*0.62);
+        const pc=paper; grd.addColorStop(0, pc); grd.addColorStop(0.55,'rgba(0,0,0,0)'); grd.addColorStop(1,'rgba(0,0,0,0)');
+        // build translucent paper by drawing paper w/ alpha center
+        ctx.save(); ctx.globalAlpha=0.55; const g2=ctx.createRadialGradient(w/2,h*0.5,0,w/2,h*0.5,Math.min(w,h)*0.55);
+        g2.addColorStop(0,pc); g2.addColorStop(1,'rgba(255,255,255,0)'); ctx.fillStyle=g2; ctx.fillRect(0,0,w,h); ctx.restore();
+      };
+      const s={visible:true,playing:!this.reduced, step:dt=>{t+=dt;}, render, rebuild:()=>{build();render();}};
+      scenes.hero=s; render();
+      const b=document.getElementById('btnHero'); setBtn('btnHero',s.playing);
+      b.addEventListener('click',()=>{ s.playing=!s.playing; setBtn('btnHero',s.playing); if(!s.playing) render(); });
+      if(this.reduced){ t=1200; render(); }
+    })();
+
+    // ============ SCENE 2 : CODEWORD ASSEMBLY ============
+    (()=>{
+      const cv=document.getElementById('cv2'); if(!cv) return;
+      let g=fit(cv), appear=0, done=false;
+      const render=()=>{ drawPattern(g.ctx,g.w,g.h,targetArr, done?null:appear); };
+      const s={visible:false,playing:false, step:dt=>{ appear=Math.min(1.02,appear+dt/1400); if(appear>=1.02){done=true;s.playing=false;} },
+        render, rebuild:()=>{g=fit(cv);render();} , start:()=>{ appear=0;done=false;s.playing=!this.reduced; if(this.reduced){done=true;} render(); } };
+      scenes.s2=s; render();
+      document.getElementById('btn2').addEventListener('click',()=>{ appear=0;done=false;s.playing=true; });
+    })();
+
+    // ============ SCENE 3 : NOISY COPY + SHANNON ============
+    (()=>{
+      const cv=document.getElementById('cv3'), cp=document.getElementById('cv3plot'); if(!cv) return;
+      let g=fit(cv), gp=fit(cp);
+      const mu=0.028; let state, gen, acc, hist, rng;
+      const reset=()=>{ state=targetArr.slice(); gen=0; acc=0; hist=[{n:0,bits:N}]; rng=mul(99); render(); update(); };
+      const update=()=>{ let match=0; for(let i=0;i<N;i++){ if(state[i]===targetArr[i]) match++; } let m=match/N; m=Math.max(m,1-m);
+        const bits=Math.round(N*(1-H2(m)));
+        document.getElementById('out3gen').textContent=gen;
+        document.getElementById('out3bits').textContent=bits;
+      };
+      const step=dt=>{ acc+=dt; if(acc<300) return; acc=0; if(gen>=90){ s.playing=false; setBtn('btn3',false); return; }
+        for(let i=0;i<N;i++){ if(rng()<mu) state[i]=state[i]?0:1; } gen++;
+        const m0=state.reduce((a,v,i)=>a+(v===targetArr[i]?1:0),0)/N; const mm=Math.max(m0,1-m0);
+        hist.push({n:gen,bits:N*(1-H2(mm))}); update();
+      };
+      const render=()=>{ drawPattern(g.ctx,g.w,g.h,state); drawPlot(); };
+      const drawPlot=()=>{ const {ctx,w,h}=gp; const ink=cvar('--ink'),faint=cvar('--ink-faint'),acc2=cvar('--accent'),soft=cvar('--accent-soft'),line=cvar('--line');
+        ctx.clearRect(0,0,w,h); const pl=42,pr=14,pt=18,pb=30; const px=x=>pl+(w-pl-pr)*(x/90); const py=v=>pt+(h-pt-pb)*(1-v/N);
+        ctx.strokeStyle=line; ctx.lineWidth=1; ctx.beginPath(); ctx.moveTo(pl,pt); ctx.lineTo(pl,h-pb); ctx.lineTo(w-pr,h-pb); ctx.stroke();
+        ctx.fillStyle=faint; ctx.font='10px '+cvar('--mono'); ctx.textAlign='right';
+        ctx.fillText('625', pl-6, py(N)+3); ctx.fillText('0', pl-6, py(0)+3);
+        ctx.textAlign='center'; ctx.fillText('generations →', (pl+w-pr)/2, h-8);
+        // theoretical Shannon curve
+        ctx.strokeStyle=soft; ctx.lineWidth=1.5; ctx.setLineDash([4,4]); ctx.beginPath();
+        for(let n=0;n<=90;n++){ const mth=0.5*(1+Math.pow(1-2*mu,n)); const mm=Math.max(mth,1-mth); const b=N*(1-H2(mm)); const X=px(n),Y=py(b); n===0?ctx.moveTo(X,Y):ctx.lineTo(X,Y); }
+        ctx.stroke(); ctx.setLineDash([]);
+        // empirical line
+        ctx.strokeStyle=acc2; ctx.lineWidth=2; ctx.beginPath(); hist.forEach((p,i)=>{ const X=px(p.n),Y=py(p.bits); i===0?ctx.moveTo(X,Y):ctx.lineTo(X,Y); }); ctx.stroke();
+        if(hist.length){ const p=hist[hist.length-1]; ctx.fillStyle=acc2; ctx.beginPath(); ctx.arc(px(p.n),py(p.bits),3.5,0,7); ctx.fill(); }
+        ctx.fillStyle=faint; ctx.textAlign='left'; ctx.fillText('theory', pl+8, pt+12);
+      };
+      const s={visible:false,playing:false, step, render, rebuild:()=>{g=fit(cv);gp=fit(cp);render();}, start:()=>{ if(gen===0){s.playing=!this.reduced;} } };
+      scenes.s3=s; reset();
+      document.getElementById('btn3').addEventListener('click',()=>{ if(gen>=90) reset(); s.playing=!s.playing; setBtn('btn3',s.playing); });
+      document.getElementById('btn3reset').addEventListener('click',()=>{ reset(); s.playing=false; setBtn('btn3',false); });
+    })();
+
+    // ============ SCENE 4 : NO BACKUP ============
+    (()=>{
+      const cvl=document.getElementById('cv4l'), cvr=document.getElementById('cv4r'); if(!cvl) return;
+      let gl=fit(cvl), gr=fit(cvr); const mu=0.03; let right,gen,acc,rng;
+      const reset=()=>{ right=targetArr.slice(); gen=0; acc=0; rng=mul(1234); render(); update(); };
+      const update=()=>{ document.getElementById('out4gen').textContent=gen; document.getElementById('out4l').textContent='625 bits';
+        let match=0; for(let i=0;i<N;i++) if(right[i]===targetArr[i]) match++; let m=match/N; m=Math.max(m,1-m);
+        document.getElementById('out4r').textContent=Math.round(N*(1-H2(m)))+' bits'; };
+      const step=dt=>{ acc+=dt; if(acc<340) return; acc=0; if(gen>=90){ s.playing=false; setBtn('btn4',false); return; }
+        for(let i=0;i<N;i++){ if(rng()<mu) right[i]=right[i]?0:1; } gen++; update(); };
+      const render=()=>{ drawPattern(gl.ctx,gl.w,gl.h,targetArr); drawPattern(gr.ctx,gr.w,gr.h,right); };
+      const s={visible:false,playing:false,step,render, rebuild:()=>{gl=fit(cvl);gr=fit(cvr);render();}, start:()=>{ if(gen===0)s.playing=!this.reduced; } };
+      scenes.s4=s; reset();
+      document.getElementById('btn4').addEventListener('click',()=>{ if(gen>=90) reset(); s.playing=!s.playing; setBtn('btn4',s.playing); });
+      document.getElementById('btn4reset').addEventListener('click',()=>{ reset(); s.playing=false; setBtn('btn4',false); });
+    })();
+
+    // ---- shared domain grid (stripes) for scenes 5 & 6 ----
+    const W5=44,H5=24,SW=8;
+    const stripe=x=>(Math.floor(x/SW)%2===0)?1:0;
+    const drawDomain=(ctx,w,h,state,anchorMask,truth)=>{ ctx.clearRect(0,0,w,h);
+      const pad=Math.min(w,h)*0.06; const cell=Math.min((w-2*pad)/W5,(h-2*pad)/H5); const ox=(w-cell*W5)/2, oy=(h-cell*H5)/2;
+      const cA=cvar('--accent'), cB=cvar('--ink-soft'), ink=cvar('--ink');
+      for(let y=0;y<H5;y++)for(let x=0;x<W5;x++){ const i=y*W5+x; if(state[i]){ ctx.globalAlpha=1; ctx.fillStyle=cA; } else { ctx.globalAlpha=.42; ctx.fillStyle=cB; } ctx.fillRect(ox+x*cell+0.5,oy+y*cell+0.5,cell-1,cell-1); }
+      ctx.globalAlpha=1;
+      if(anchorMask){ ctx.strokeStyle=ink; ctx.lineWidth=Math.max(1.4,cell*0.16); for(let i=0;i<W5*H5;i++){ if(anchorMask[i]){ const x=i%W5,y=(i/W5)|0; ctx.strokeRect(ox+x*cell+1.2,oy+y*cell+1.2,cell-2.4,cell-2.4); } } }
+    };
+    const anchorMaskDefault=(()=>{ const m=new Uint8Array(W5*H5); for(let y=0;y<H5;y++)for(let x=0;x<W5;x++){ if(x%SW===4) m[y*W5+x]=1; } return m; })();
+    // one relaxation sweep: noise + neighbor recruitment; anchors pinned to anchorVal
+    // for each site, the value of the nearest anchor in its row (the signal anchors spread)
+    const buildSpread=(anchorMask,anchorVal)=>{ const sp=new Uint8Array(W5*H5);
+      for(let y=0;y<H5;y++){ let anchors=[]; for(let x=0;x<W5;x++){ const i=y*W5+x; if(anchorMask[i]) anchors.push(x); }
+        for(let x=0;x<W5;x++){ const i=y*W5+x; if(!anchors.length){ sp[i]=anchorVal[i]; continue; }
+          let best=anchors[0]; for(const ax of anchors){ const d=Math.abs(ax-x), db=Math.abs(best-x); if(d<db||(d===db&&ax>best)) best=ax; } sp[i]=anchorVal[y*W5+best]; } }
+      return sp; };
+    // anchors spread their signal locally (fidelity) + cooperative majority feedback (threshold) + copy noise
+    const relax=(state,anchorMask,anchorVal,spread,noise,steps,rng)=>{ const n=W5*H5;
+      for(let k=0;k<steps;k++){ const i=(rng()*n)|0; if(anchorMask&&anchorMask[i]){ state[i]=anchorVal[i]; continue; }
+        if(rng()<noise){ state[i]=rng()<0.5?1:0; continue; }
+        if(rng()<0.22){ state[i]=spread[i]; continue; } // anchor signal reaches this site
+        const x=i%W5,y=(i/W5)|0; let s=0;
+        if(x>0) s+=state[i-1]?1:-1; if(x<W5-1) s+=state[i+1]?1:-1;
+        if(y>0) s+=state[i-W5]?1:-1; if(y<H5-1) s+=state[i+W5]?1:-1;
+        if(s>0) state[i]=1; else if(s<0) state[i]=0; // tie: hold
+      }
+      if(anchorMask){ for(let i=0;i<n;i++) if(anchorMask[i]) state[i]=anchorVal[i]; }
+    };
+
+    // ============ SCENE 5 : ANCHORS + NOISE SLIDER ============
+    (()=>{
+      const cv=document.getElementById('cv5'); if(!cv) return; let g=fit(cv);
+      const truth=new Uint8Array(W5*H5); for(let y=0;y<H5;y++)for(let x=0;x<W5;x++) truth[y*H5*0+ y*W5 + x]=stripe(x);
+      const anchorVal=truth; const mask=anchorMaskDefault; const rng=mul(42); const spread=buildSpread(mask,anchorVal);
+      let state=truth.slice(); let noise=0.06;
+      const sld=document.getElementById('sld5'); const startVal=(this.props.startNoise!=null)?this.props.startNoise:0.06;
+      sld.value=Math.round(clamp(startVal,0,0.5)/0.5*100); noise=clamp(startVal,0,0.5);
+      const readOut=()=>{ let match=0; for(let i=0;i<W5*H5;i++) if(state[i]===truth[i]) match++; const o=match/(W5*H5); const ord=Math.max(0,(o-0.5)/0.5); const pct=Math.round(ord*100);
+        document.getElementById('out5n').textContent=noise.toFixed(2); document.getElementById('out5o').textContent=pct+'%';
+        const bar=document.getElementById('bar5'); bar.style.width=pct+'%';
+        bar.style.background = ord>0.6?cvar('--accent'):(ord>0.3?cvar('--accent-soft'):cvar('--mark-off')); };
+      const render=()=>{ drawDomain(g.ctx,g.w,g.h,state,mask,truth); readOut(); };
+      const step=dt=>{ relax(state,mask,anchorVal,spread,noise, 3400, rng); };
+      const s={visible:false,playing:false,step,render, rebuild:()=>{g=fit(cv);render();}, start:()=>{ s.playing=true; } };
+      scenes.s5=s;
+      // settle initial
+      for(let k=0;k<40;k++) relax(state,mask,anchorVal,spread,noise,2600,rng); render();
+      const onIn=()=>{ noise=(+sld.value/100)*0.85; const burst=this.reduced?40:2; for(let k=0;k<burst;k++) relax(state,mask,anchorVal,spread,noise,2600,rng); render(); s.playing=true; };
+      sld.addEventListener('input',onIn);
+      this._setNoise=(v)=>{ const nv=clamp(v,0,0.4); sld.value=Math.round(nv/0.85*100); onIn(); };
+    })();
+
+    // ============ SCENE 6 : POINT OF NO RETURN ============
+    (()=>{
+      const cva=document.getElementById('cv6a'), cvb=document.getElementById('cv6b'); if(!cva) return;
+      let ga=fit(cva), gb=fit(cvb);
+      const truth=new Uint8Array(W5*H5); for(let y=0;y<H5;y++)for(let x=0;x<W5;x++) truth[y*W5+x]=stripe(x);
+      const wrong=new Uint8Array(W5*H5); for(let i=0;i<W5*H5;i++) wrong[i]=truth[i]?0:1; // corrupted anchors pin the inverse
+      const maskFull=anchorMaskDefault;
+      const spreadT=buildSpread(maskFull,truth), spreadW=buildSpread(maskFull,wrong);
+      let A,B,rngA=mul(5),rngB=mul(6);
+      const setup=()=>{ A=new Uint8Array(W5*H5); for(let i=0;i<W5*H5;i++) A[i]=rngA()<0.5?1:0; // heavy drift
+        for(let i=0;i<W5*H5;i++) if(maskFull[i]) A[i]=truth[i]; // anchors intact/correct
+        B=truth.slice(); for(let i=0;i<W5*H5;i++) if(rngB()<0.08) B[i]=B[i]?0:1; // slight drift
+        for(let i=0;i<W5*H5;i++) if(maskFull[i]) B[i]=wrong[i]; // anchors corrupted
+      };
+      const match=(st,ref)=>{ let m=0; for(let i=0;i<W5*H5;i++) if(st[i]===ref[i]) m++; return m/(W5*H5); };
+      const readOut=()=>{ document.getElementById('out6a').textContent=Math.round(match(A,truth)*100)+'%'; document.getElementById('out6b').textContent=Math.round(match(B,truth)*100)+'%'; };
+      const render=()=>{ drawDomain(ga.ctx,ga.w,ga.h,A,maskFull,truth); drawDomain(gb.ctx,gb.w,gb.h,B,maskFull,truth); readOut(); };
+      setup(); render();
+      let anim=null;
+      const s={visible:false,playing:false, rebuild:()=>{ga=fit(cva);gb=fit(cvb);render();}, render };
+      scenes.s6=s;
+      const btn=document.getElementById('btn6'); const msg=document.getElementById('out6msg');
+      const recover=()=>{ const rA=mul(21),rB=mul(22); let f=0; const total=this.reduced?1:70;
+        const run=()=>{ f++; relax(A,maskFull,truth,spreadT,0,3000,rA); relax(B,maskFull,wrong,spreadW,0,3000,rB); render();
+          if(f<total){ anim=requestAnimationFrame(run); } else { msg.innerHTML='Cell A rebuilt from its intact anchors. Cell B was pulled toward the <em>wrong</em> pattern its corrupted anchors now encode, lost, despite looking healthy.'; btn.textContent='Reset'; btn.dataset.done='1'; } };
+        run(); };
+      btn.addEventListener('click',()=>{ if(anim) cancelAnimationFrame(anim);
+        if(btn.dataset.done){ btn.dataset.done=''; btn.textContent='Attempt recovery'; msg.textContent='Both cells re-read their marks from the anchors outward.'; setup(); render(); }
+        else { btn.textContent='Re-reading…'; recover(); } });
+    })();
+
+    // ============ SCENE 7 : REPROGRAMMING DOSE ============
+    (()=>{
+      const cp=document.getElementById('cv7plot'), cv=document.getElementById('cv7'); if(!cv) return;
+      let gp=fit(cp), g=fit(cv);
+      const rngR=mul(777); const rfield=new Float32Array(N),rfield2=new Float32Array(N);
+      for(let i=0;i<N;i++){rfield[i]=rngR();rfield2[i]=rngR();}
+      const oldState=(()=>{ const a=targetArr.slice(); const r=mul(3); for(let i=0;i<N;i++) if(r()<0.34) a[i]=a[i]?0:1; return a; })();
+      let dose=0.34;
+      const rho=d=>clamp(d/0.35,0,1);           // restoration toward truth
+      const erase=d=>clamp((d-0.46)/0.5,0,1);    // wipe toward pluripotent blank
+      const benefit=d=>rho(d)*(1-erase(d));
+      const displayState=d=>{ const out=new Uint8Array(N); const rr=rho(d), er=erase(d);
+        for(let i=0;i<N;i++){ let v = (rfield[i]<rr) ? targetArr[i] : oldState[i]; if(rfield2[i]<er) v=0; out[i]=v; } return out; };
+      const drawPlot=()=>{ const {ctx,w,h}=gp; const faint=cvar('--ink-faint'),acc=cvar('--accent'),line=cvar('--line'),ink=cvar('--ink'),soft=cvar('--accent-soft');
+        ctx.clearRect(0,0,w,h); const pl=16,pr=14,pt=22,pb=42; const px=d=>pl+(w-pl-pr)*d; const py=v=>pt+(h-pt-pb)*(1-v);
+        ctx.strokeStyle=line; ctx.lineWidth=1; ctx.beginPath(); ctx.moveTo(pl,h-pb); ctx.lineTo(w-pr,h-pb); ctx.stroke();
+        // zones
+        ctx.fillStyle=soft; ctx.globalAlpha=.16; ctx.fillRect(px(0.24),pt,px(0.46)-px(0.24),h-pt-pb); ctx.globalAlpha=1;
+        ctx.strokeStyle=acc; ctx.lineWidth=2.4; ctx.beginPath(); for(let k=0;k<=100;k++){ const d=k/100; const X=px(d),Y=py(benefit(d)); k===0?ctx.moveTo(X,Y):ctx.lineTo(X,Y);} ctx.stroke();
+        const X=px(dose),Y=py(benefit(dose)); ctx.strokeStyle=faint; ctx.setLineDash([3,3]); ctx.beginPath(); ctx.moveTo(X,pt);ctx.lineTo(X,h-pb);ctx.stroke(); ctx.setLineDash([]);
+        ctx.fillStyle=acc; ctx.beginPath(); ctx.arc(X,Y,4.5,0,7); ctx.fill();
+        ctx.fillStyle=faint; ctx.font='10px '+cvar('--mono'); ctx.textAlign='center';
+        ctx.fillText('too little', px(0.12), h-14); ctx.fillText('window', px(0.35), h-14); ctx.fillText('identity erased', px(0.78), h-14);
+        ctx.textAlign='left'; ctx.fillText('rejuvenation benefit ↑', pl+2, pt-8);
+      };
+      const render=()=>{ drawPlot(); drawPattern(g.ctx,g.w,g.h,displayState(dose)); };
+      const s={visible:false,playing:false, rebuild:()=>{gp=fit(cp);g=fit(cv);render();}, render };
+      scenes.s7=s;
+      const sld=document.getElementById('sld7'); const zone=document.getElementById('out7z');
+      sld.value=Math.round(dose*100);
+      const onIn=()=>{ dose=+sld.value/100; document.getElementById('out7d').textContent=dose.toFixed(2);
+        if(dose<0.24) zone.textContent='Too little, the old pattern barely stirs.';
+        else if(dose<=0.46) zone.innerHTML='<strong style="color:var(--accent)">Rejuvenation window</strong>, identity restored, age reset.';
+        else if(dose<0.7) zone.textContent='Past the window, marks are being wiped faster than restored.';
+        else zone.innerHTML='<strong style="color:var(--accent)">Identity erased</strong>, a blank, pluripotent cell. In vivo: teratoma risk.';
+        render(); };
+      sld.addEventListener('input',onIn); onIn();
+    })();
+
+    // ============ SCENE 8 : DNMT1 vs CTCF ============
+    (()=>{
+      const cv=document.getElementById('cv8'); if(!cv) return; let g=fit(cv);
+      const M=16; const rng=mul(88);
+      const parent=[],trueVal=[]; for(let i=0;i<M;i++){ trueVal[i]=i%3===0?1:(i%3===1?0:1); parent[i]=trueVal[i]; }
+      // corrupt a couple sites in parent (drifted)
+      const corrupt=[4,11]; corrupt.forEach(i=>parent[i]=parent[i]?0:1);
+      let daughter=new Array(M).fill(-1);
+      const anchorIdx=8; let anchorCur=trueVal[anchorIdx]?0:1; // currently drifted wrong
+      let t=0, head=0, clamped=false;
+      const render=()=>{ const {ctx,w,h}=g; const ink=cvar('--ink'),faint=cvar('--ink-faint'),acc=cvar('--accent'),off=cvar('--mark-off'),line=cvar('--line'),paper=cvar('--paper-2'),soft=cvar('--accent-soft');
+        ctx.clearRect(0,0,w,h); ctx.fillStyle=faint; ctx.font='11px '+cvar('--mono'); ctx.textAlign='left';
+        const pad=w*0.06, gw=w-2*pad, cw=gw/M, rad=Math.min(cw*0.32,16);
+        const mark=(cx,cy,v,error)=>{ ctx.beginPath(); ctx.arc(cx,cy,rad,0,7); ctx.fillStyle=v?acc:off; ctx.fill(); if(error){ ctx.strokeStyle=cvar('--ink'); ctx.lineWidth=2; ctx.beginPath(); ctx.arc(cx,cy,rad+3.5,0,7); ctx.stroke(); } };
+        // ---- lane 1: DNMT1 ----
+        const y1p=h*0.16, y1d=h*0.30;
+        ctx.fillStyle=faint; ctx.fillText('DNMT1, copies whatever it finds', pad, h*0.075);
+        for(let i=0;i<M;i++){ const cx=pad+(i+.5)*cw; mark(cx,y1p,parent[i], corrupt.includes(i)); if(daughter[i]>=0) mark(cx,y1d,daughter[i], corrupt.includes(i)); else { ctx.strokeStyle=line; ctx.setLineDash([2,3]); ctx.beginPath(); ctx.arc(cx,y1d,rad,0,7); ctx.stroke(); ctx.setLineDash([]); } }
+        ctx.fillStyle=faint; ctx.textAlign='right'; ctx.fillText('parent', pad-6, y1p+3); ctx.fillText('daughter', pad-6, y1d+3); ctx.textAlign='left';
+        // polymerase glyph
+        const hx=pad+(head+.5)*cw;
+        if(head<M){ ctx.fillStyle=soft; roundRect(ctx,hx-cw*0.42,(y1p+y1d)/2-rad-6,cw*0.84,(y1d-y1p)+rad*2+12,5); ctx.fill(); ctx.fillStyle=cvar('--paper'); ctx.textAlign='center'; ctx.font='9px '+cvar('--mono'); ctx.fillText('DNMT1',hx,(y1p+y1d)/2+3); ctx.font='11px '+cvar('--mono'); ctx.textAlign='left'; }
+        // ---- lane 2: CTCF ----
+        const y2=h*0.66; ctx.fillStyle=faint; ctx.fillText('CTCF, clamps the anchor back to its true value', pad, h*0.53);
+        for(let i=0;i<M;i++){ const cx=pad+(i+.5)*cw; let v=trueVal[i]; let err=false; if(i===anchorIdx){ v=anchorCur; err=(anchorCur!==trueVal[i]); }
+          mark(cx,y2,v,err && !clamped); if(i===anchorIdx){ // draw clamp bracket
+            ctx.strokeStyle=clamped?acc:cvar('--ink'); ctx.lineWidth=2.4; const bw=rad+8; ctx.beginPath(); ctx.moveTo(cx-bw,y2-bw); ctx.lineTo(cx-bw,y2+bw); ctx.moveTo(cx+bw,y2-bw); ctx.lineTo(cx+bw,y2+bw); ctx.stroke();
+            ctx.fillStyle=clamped?acc:cvar('--ink'); ctx.textAlign='center'; ctx.font='9px '+cvar('--mono'); ctx.fillText(clamped?'CTCF ✓':'CTCF', cx, y2+bw+16); ctx.font='11px '+cvar('--mono'); ctx.textAlign='left'; }
+        }
+        ctx.fillStyle=faint; ctx.textAlign='center'; ctx.font='10px '+cvar('--mono');
+        ctx.fillText(head>=M ? 'error faithfully inherited →' : 'copying…', w*0.5, y1d+rad+34);
+        ctx.textAlign='left';
+      };
+      function roundRect(ctx,x,y,w,h,r){ ctx.beginPath(); ctx.moveTo(x+r,y); ctx.arcTo(x+w,y,x+w,y+h,r); ctx.arcTo(x+w,y+h,x,y+h,r); ctx.arcTo(x,y+h,x,y,r); ctx.arcTo(x,y,x+w,y,r); ctx.closePath(); }
+      let phase='copy';
+      const reset=()=>{ daughter=new Array(M).fill(-1); head=0; clamped=false; anchorCur=trueVal[anchorIdx]?0:1; t=0; phase='copy'; };
+      const step=dt=>{ t+=dt;
+        if(phase==='copy'){ if(t>420){ t=0; if(head<M){ daughter[head]=parent[head]; head++; } if(head>=M){ phase='clamp'; } } }
+        else if(phase==='clamp'){ if(t>760){ t=0; clamped=true; anchorCur=trueVal[anchorIdx]; phase='hold'; } }
+        else if(phase==='hold'){ if(t>2000){ reset(); } } };
+      const render0=render;
+      const s={visible:false,playing:false, step, render:render0, rebuild:()=>{g=fit(cv);render0();}, start:()=>{ s.playing=!this.reduced; } };
+      scenes.s8=s; reset(); render0();
+      const b=document.getElementById('btn8'); setBtn('btn8',false);
+      b.addEventListener('click',()=>{ s.playing=!s.playing; setBtn('btn8',s.playing); if(s.playing) setBtn('btn8',true); });
+      if(this.reduced){ // static: show completed copy + clamped
+        daughter=parent.slice(); head=M+1; clamped=true; anchorCur=trueVal[anchorIdx]; render0();
+      }
+    })();
+
+    // ---------- redraw all (theme change / resize) ----------
+    this.redrawAll=()=>{ for(const k in scenes){ const s=scenes[k]; s.rebuild? s.rebuild() : (s.render&&s.render()); } };
+    let rz; window.addEventListener('resize',()=>{ clearTimeout(rz); rz=setTimeout(()=>this.redrawAll(),160); });
+
+    // ---------- responsive: stack two-up canvases on narrow ----------
+    const applyStack=()=>{ const narrow=window.innerWidth<720; document.querySelectorAll('#ag [data-stack]').forEach(el=>{ el.style.gridTemplateColumns = narrow?'1fr':(el.getAttribute('data-stack')==='s7'?'1.15fr .85fr':'1fr 1fr'); }); };
+    applyStack(); window.addEventListener('resize',applyStack);
+
+    // ---------- reveal + visibility → start scenes ----------
+    const secMap={s2:'s2',s3:'s3',s4:'s4',s5:'s5',s6:'s6',s7:'s7',s8:'s8'};
+    document.querySelectorAll('#ag [data-reveal]').forEach(el=>{ if(this.reduced){ el.style.opacity=1; el.style.transform='none'; } });
+    const io=new IntersectionObserver((ents)=>{ ents.forEach(e=>{ const id=e.target.id;
+      if(e.isIntersecting){ const rev=e.target.querySelector('[data-reveal]'); if(rev){ rev.style.opacity=1; rev.style.transform='none'; } }
+      const key=secMap[id]; if(key && scenes[key]){ scenes[key].visible=e.isIntersecting; if(e.isIntersecting && scenes[key].start && !scenes[key]._started){ scenes[key]._started=true; scenes[key].start(); } }
+      if(id==='s1'&&scenes.hero){ scenes.hero.visible=e.isIntersecting; }
+    }); },{threshold:0.18});
+    document.querySelectorAll('#ag section').forEach(s=>io.observe(s));
+    // also reveal hero immediately
+    const heroRev=document.querySelector('#s1 [data-reveal]'); if(heroRev){ requestAnimationFrame(()=>{ heroRev.style.opacity=1; heroRev.style.transform='none'; }); }
+
+    // ---------- progress bar ----------
+    const onScroll=()=>{ const sc=document.scrollingElement||document.documentElement; const max=sc.scrollHeight-sc.clientHeight; const p=max>0?sc.scrollTop/max:0; const bar=document.getElementById('ag-prog'); if(bar) bar.style.width=(p*100)+'%'; };
+    window.addEventListener('scroll',onScroll,{passive:true}); onScroll();
+  }
+
+  componentDidUpdate(){ if(!this.R) return;
+    this.R.style.setProperty('--accent', typeof this.props.accentColor==='string' ? this.props.accentColor : (this.R.getAttribute('data-theme')==='dark'?'#9498de':'#5559a6'));
+    if(this.props.defaultTheme && this._setTheme) this._setTheme(this.props.defaultTheme);
+    if(this.props.startNoise!=null && this._setNoise && this.props.startNoise!==this._lastNoise){ this._lastNoise=this.props.startNoise; this._setNoise(this.props.startNoise); }
+    this.redrawAll&&this.redrawAll();
+  }
+  componentWillUnmount(){ cancelAnimationFrame(this._raf); }
+  renderVals(){ return {}; }
+}
+</script>
+</body>
+</html>
