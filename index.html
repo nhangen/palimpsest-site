@@ -241,29 +241,29 @@
     <div data-reveal style="opacity:0;transform:translateY(18px);transition:opacity .8s ease,transform .8s ease;">
       <div style="font-family:var(--mono);font-size:12px;letter-spacing:.24em;text-transform:uppercase;color:var(--ink-faint);">Our own analysis · a negative result</div>
       <h2 style="font-size:clamp(28px,4.4vw,48px);line-height:1.05;margin:.28em 0 .5em;font-weight:600;letter-spacing:-.01em;">What we actually found</h2>
-      <p style="font-size:clamp(16px,1.7vw,19px);line-height:1.66;color:var(--ink-soft);max-width:64ch;text-wrap:pretty;">Everything above is the model. So we went looking for its signature in real human blood, reanalyzing public whole-genome methylation data for the tell-tale <strong style="color:var(--ink);font-weight:600;">melting</strong>: within-cell disorder that should rise with age at composition-inert, fully-methylated sites. We did not find it.</p>
+      <p style="font-size:clamp(16px,1.7vw,19px);line-height:1.66;color:var(--ink-soft);max-width:64ch;text-wrap:pretty;">Everything above is the model. So we went looking for its signature in real human blood, reanalyzing public whole-genome methylation data for the tell-tale <strong style="color:var(--ink);font-weight:600;">melting</strong>: within-cell disorder that should rise with age at composition-inert, fully-methylated sites. At the mean level, up to age ~52, we did not find it — but a read-level test in the very old reopens the question.</p>
     </div>
     <div data-reveal style="opacity:0;transform:translateY(18px);transition:opacity .8s ease,transform .8s ease;margin-top:34px;display:grid;gap:16px;">
 
       <div style="border:1px solid var(--line);border-radius:6px;background:var(--paper-2);padding:20px 22px;display:grid;grid-template-columns:auto 1fr;gap:18px;align-items:start;">
         <div style="font-family:var(--mono);font-size:13px;color:var(--ink-faint);padding-top:2px;">01</div>
         <div>
-          <div style="font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);">No late-life melting</div>
-          <p style="font-size:16px;line-height:1.62;color:var(--ink-soft);margin:9px 0 0;text-wrap:pretty;">The age-drift trajectory is <strong style="color:var(--ink);font-weight:600;">front-loaded and decelerating</strong>, a relaxation toward a floor, not the late-accelerating runaway the melting picture predicts.</p>
+          <div style="font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);">Shape leans relaxation, not melting</div>
+          <p style="font-size:16px;line-height:1.62;color:var(--ink-soft);margin:9px 0 0;text-wrap:pretty;">The age-drift trajectory is <strong style="color:var(--ink);font-weight:600;">front-loaded and decelerating</strong>, a relaxation toward a floor, not the late-accelerating runaway the melting picture predicts. But much of that front-loading is developmental — restricted to the adult aging window the edge nearly vanishes — so it is suggestive, not decisive, and we lean on the composition-inert test below.</p>
         </div>
       </div>
 
       <div style="border:1px solid var(--line);border-radius:6px;background:var(--paper-2);padding:20px 22px;display:grid;grid-template-columns:auto 1fr;gap:18px;align-items:start;">
         <div style="font-family:var(--mono);font-size:13px;color:var(--ink-faint);padding-top:2px;">02</div>
         <div>
-          <div style="font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);">The one melting-like signal is an artifact</div>
-          <p style="font-size:16px;line-height:1.62;color:var(--ink-soft);margin:9px 0 0;text-wrap:pretty;">Sorted CD4 T-cells, ages 18–25 against 82–86 (GSE79798), showed a small <strong style="color:var(--ink);font-weight:600;">+0.008</strong> read-level disorder gap. But it <em>rose with CpG density</em>, the fingerprint of per-base copy error, and it sat inside the pure lab-noise floor measured on identical DNA run through different bisulfite kits and sequencers (GSE128731: +0.022 to +0.049). A gap smaller than the instrument's own noise is not a biological signal.</p>
+          <div style="font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);">The one melting-like signal is unresolved</div>
+          <p style="font-size:16px;line-height:1.62;color:var(--ink-soft);margin:9px 0 0;text-wrap:pretty;">Sorted CD4 T-cells, ages 18–25 against 82–86 (GSE79798), showed a small <strong style="color:var(--ink);font-weight:600;">+0.008</strong> read-level disorder gap, consistent across every old donor. We first read it as an aged-DNA artifact because it rises with CpG density. But with real genomic annotation the gap <strong style="color:var(--ink);font-weight:600;">concentrates in Polycomb domains</strong> — exactly where the companion paper's meltable phase lives. CpG-dense concentration is the <em>shared</em> signature of both aged-DNA error and predicted melting, so it can't tell them apart. At n=3 vs 3 this stays unresolved; a bisulfite-free nanopore test is the decider.</p>
           <div style="margin-top:20px;padding-top:16px;border-top:1px solid var(--line);">
             <div style="font-family:var(--mono);font-size:10px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-faint);margin-bottom:10px;">read-level disorder gap · old minus young</div>
             <div style="position:relative;height:74px;">
               <div style="position:absolute;left:0;right:0;top:40px;height:2px;background:var(--line);"></div>
               <div style="position:absolute;top:24px;height:16px;left:40%;width:49.1%;background:var(--accent-soft);opacity:.30;border-radius:3px;"></div>
-              <div style="position:absolute;top:4px;left:40%;width:49.1%;text-align:center;font-family:var(--mono);font-size:10px;color:var(--ink-soft);">lab-noise floor</div>
+              <div style="position:absolute;top:4px;left:40%;width:49.1%;text-align:center;font-family:var(--mono);font-size:10px;color:var(--ink-soft);">cross-kit variance (loose bound)</div>
               <div style="position:absolute;top:28px;left:14.5%;width:2px;height:14px;background:var(--accent);"></div>
               <div style="position:absolute;top:28px;left:14.5%;width:8px;height:8px;background:var(--accent);border-radius:999px;transform:translate(-3px,12px);"></div>
               <div style="position:absolute;top:50px;left:14.5%;transform:translateX(-50%);font-family:var(--mono);font-size:10px;color:var(--accent);white-space:nowrap;">+0.008</div>
@@ -279,7 +279,7 @@
         <div style="font-family:var(--mono);font-size:15px;color:var(--accent);padding-top:1px;">→</div>
         <div>
           <div style="font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);">Plain takeaway</div>
-          <p style="font-size:16px;line-height:1.62;color:var(--ink);margin:9px 0 0;text-wrap:pretty;">In blood, aging looks like <strong style="font-weight:600;">per-site information decay plus shifting cell composition</strong>, with no detectable melting to reverse. This is a cross-sectional negative result at the resolution public data allows. The definitive single-cohort test is still pending.</p>
+          <p style="font-size:16px;line-height:1.62;color:var(--ink);margin:9px 0 0;text-wrap:pretty;">In blood up to age ~52, aging looks like <strong style="font-weight:600;">per-site information decay plus shifting cell composition</strong>, with no mean-level melting signature. In the very old, a read-level signal in Polycomb domains reopens the question — melting or aged-DNA chemistry, unresolved. The definitive bisulfite-free (nanopore) test is still pending.</p>
         </div>
       </div>
 
