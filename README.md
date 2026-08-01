@@ -1,14 +1,19 @@
 # The Palimpsest — companion site
 
-Interactive explainer for an information-theoretic model of aging: identity as a
-message copied, every cell division, through a channel with no backup. Seven
-scenes cover the copy channel, loss of the original, anchor sites, the point of
-no return, a safe reprogramming dose, and — in a closing section — what our own
-reanalysis of public DNA-methylation data actually found (a negative, in-model
-result: no single-cell "melting" signature in human blood; the one melting-like
-signal is within the instrument's own noise floor).
+Interactive explainer and evidence audit for an information-theoretic model of
+aging. The site distinguishes preserving chromatin substrate ("the paper"),
+preserving read-write machinery ("the readers"), and targeted repair from a
+cleaner external reference. Its nanoparticle/nanobot control is explicitly a
+simulation architecture, not a demonstrated device or treatment.
 
-Live: https://nhangen.github.io/palimpsest-site/
+The evidence is mixed: human blood does not show the proposed mean-level
+collective-melting signature; a read-level signal in very old T cells remains
+unresolved; public mouse skin WGBS moves both independently defined aging arms
+youthward after OSKM, directionally consistent but exploratory (`p=0.0952`).
+Finite-horizon simulations show robust two-dimensional memory below the measured
+noise threshold without establishing indefinite aging arrest.
+
+Live: https://thepalimpsest.bio/
 
 This repo publishes only the built site and the two manuscript PDFs. The model,
 simulations, and manuscript source live in a separate private repository.
